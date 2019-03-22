@@ -8,8 +8,11 @@
 #include <linux/proc_fs.h>
 #include <asm/uaccess.h>
 #include <linux/uaccess.h>
+
 #define DEVICE_NAME "onebyte"
+
 #define MAJOR_NUMBER 61
+
 /* forward declaration */
 int onebyte_open(struct inode *inode, struct file *filep);
 int onebyte_release(struct inode *inode, struct file *filep);
@@ -31,35 +34,36 @@ int onebyte_open(struct inode *inode, struct file *filep)
 {
 	return 0; // always successful
 }
+
 int onebyte_release(struct inode *inode, struct file *filep)
 {
 	return 0; // always successful
 }
+
 ssize_t onebyte_read(struct file *filep, char *buf, size_t count, loff_t *f_pos)
 {
 	/*please complete the function on your own*/
 	int error_count = 0;
-	//printk(KERN_ALERT "Checkpoint-01: the message is %c\n", *onebyte_data);
+	// copy one byte from onebyte_date in the kernel
+	// to the buffer in the user space
 	error_count = copy_to_user(buf, onebyte_data, 1);
-	//printk(KERN_ALERT "Checkpoint-02: the error_count is %d\n", error_count);
-	//printk(KERN_ALERT "Checkpoint-03: the buf is %c\n", *buf);
-	//printk(KERN_ALERT "Sent characters to the user, the message is \n");
 	if(*f_pos == 0){
+		// move f_pos one byte forward
 		*f_pos += 1;
 		return 1;
 	}else{
 		return 0;
 	}
 }
+
 ssize_t onebyte_write(struct file *filep, const char *buf, size_t count, loff_t *f_pos)
 {
 	/*please complete the function on your own*/
 	int error_count = 0;
-	//printk(KERN_ALERT "Checkpoint-04: the *f_pos is %d\n", *f_pos);
 	if (*f_pos !=0 )
+		// returning the error of no space on the device
 		return -ENOBUFS;
 	error_count = copy_from_user(onebyte_data, buf, 1);
-	//printk(KERN_ALERT "Receive characters from the user, the message is %c\n", *onebyte_data);
         *f_pos += 1;
 	return 1;
 }
@@ -89,6 +93,7 @@ static int onebyte_init(void)
 	printk(KERN_ALERT "This is a onebyte device module\n");
 	return 0;
 }
+
 static void onebyte_exit(void)
 {
 	// if the pointer is pointing to something
@@ -101,6 +106,7 @@ static void onebyte_exit(void)
 	unregister_chrdev(MAJOR_NUMBER, "onebyte");
 	printk(KERN_ALERT "Onebyte device module is unloaded\n");
 }
+
 MODULE_LICENSE("GPL");
 module_init(onebyte_init);
 module_exit(onebyte_exit);
