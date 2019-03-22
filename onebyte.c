@@ -54,6 +54,22 @@ ssize_t onebyte_read(struct file *filep, char *buf, size_t count, loff_t *f_pos)
 ssize_t onebyte_write(struct file *filep, const char *buf, size_t count, loff_t *f_pos)
 {
 	/*please complete the function on your own*/
+	printk(KERN_ALERT "Checkpoint-04: the *f_pos is %d\n", *f_pos);
+	if (*f_pos !=0 )
+		return ENOBUFS;
+	int error_count = 0;
+	error_count = copy_from_user(onebyte_data, buf, 1);
+	printk(KERN_ALERT "Receive characters from the user, the message is %c\n", *onebyte_data);
+	/*
+	if(*f_pos == 0){
+                *f_pos += 1;
+                return 1;
+        }else{
+                return 0;
+        }
+	*/
+        *f_pos += 1;
+	return 1;
 }
 
 static int onebyte_init(void)
