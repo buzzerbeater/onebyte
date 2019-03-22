@@ -39,11 +39,11 @@ ssize_t onebyte_read(struct file *filep, char *buf, size_t count, loff_t *f_pos)
 {
 	/*please complete the function on your own*/
 	int error_count = 0;
-	printk(KERN_ALERT "Checkpoint-01: the message is %c\n", *onebyte_data);
+	//printk(KERN_ALERT "Checkpoint-01: the message is %c\n", *onebyte_data);
 	error_count = copy_to_user(buf, onebyte_data, 1);
-	printk(KERN_ALERT "Checkpoint-02: the error_count is %d\n", error_count);
-	printk(KERN_ALERT "Checkpoint-03: the buf is %c\n", *buf);
-	printk(KERN_ALERT "Sent characters to the user, the message is \n");
+	//printk(KERN_ALERT "Checkpoint-02: the error_count is %d\n", error_count);
+	//printk(KERN_ALERT "Checkpoint-03: the buf is %c\n", *buf);
+	//printk(KERN_ALERT "Sent characters to the user, the message is \n");
 	if(*f_pos == 0){
 		*f_pos += 1;
 		return 1;
@@ -54,20 +54,12 @@ ssize_t onebyte_read(struct file *filep, char *buf, size_t count, loff_t *f_pos)
 ssize_t onebyte_write(struct file *filep, const char *buf, size_t count, loff_t *f_pos)
 {
 	/*please complete the function on your own*/
-	printk(KERN_ALERT "Checkpoint-04: the *f_pos is %d\n", *f_pos);
-	if (*f_pos !=0 )
-		return ENOBUFS;
 	int error_count = 0;
+	//printk(KERN_ALERT "Checkpoint-04: the *f_pos is %d\n", *f_pos);
+	if (*f_pos !=0 )
+		return -ENOBUFS;
 	error_count = copy_from_user(onebyte_data, buf, 1);
-	printk(KERN_ALERT "Receive characters from the user, the message is %c\n", *onebyte_data);
-	/*
-	if(*f_pos == 0){
-                *f_pos += 1;
-                return 1;
-        }else{
-                return 0;
-        }
-	*/
+	//printk(KERN_ALERT "Receive characters from the user, the message is %c\n", *onebyte_data);
         *f_pos += 1;
 	return 1;
 }
