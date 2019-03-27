@@ -62,7 +62,7 @@ ssize_t onebyte_write(struct file *filep, const char *buf, size_t count, loff_t 
 	int error_count = 0;
 	if (*f_pos !=0 )
 		// returning the error of no space on the device
-		return -ENOBUFS;
+		return -ENOSPC;
 	error_count = copy_from_user(onebyte_data, buf, 1);
         *f_pos += 1;
 	return 1;
